@@ -8,7 +8,13 @@ use Spatie\WebhookClient\WebhookConfig;
 
 class EverythingIsValidSignatureValidator implements SignatureValidator
 {
-    public function isValid(Request $request, WebhookConfig $config): bool
+    /**
+     * 
+     * @param Request $request 
+     * @param WebhookConfig $config 
+     * @return bool 
+     */
+    public function isValid(Request $request, WebhookConfig $config)
     {
         return true;
     }

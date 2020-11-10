@@ -8,7 +8,13 @@ use Spatie\WebhookClient\WebhookConfig;
 
 class WebhookModelWithoutPayloadSaved extends WebhookCall
 {
-    public static function storeWebhook(WebhookConfig $config, Request $request): WebhookCall
+    /**
+     * 
+     * @param WebhookConfig $config 
+     * @param Request $request 
+     * @return WebhookCall 
+     */
+    public static function storeWebhook(WebhookConfig $config, Request $request)
     {
         return WebhookCall::create([
             'name' => $config->name,

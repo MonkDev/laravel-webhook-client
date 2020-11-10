@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class ProcessEverythingWebhookProfile implements WebhookProfile
 {
-    public function shouldProcess(Request $request): bool
+    public function shouldProcess(Request $request)
     {
         return true;
     }

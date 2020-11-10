@@ -8,5 +8,5 @@ use Symfony\Component\HttpFoundation\Response;
 
 interface RespondsToWebhook
 {
-    public function respondToValidWebhook(Request $request, WebhookConfig $config): Response;
+    public function respondToValidWebhook(Request $request, WebhookConfig $config);
 }

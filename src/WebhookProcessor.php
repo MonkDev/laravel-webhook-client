@@ -10,9 +10,17 @@ use Spatie\WebhookClient\Models\WebhookCall;
 
 class WebhookProcessor
 {
-    protected Request $request;
+    /**
+     * 
+     * @var Request
+     */
+    protected $request;
 
-    protected WebhookConfig $config;
+    /**
+     * 
+     * @var WebhookConfig
+     */
+    protected $config;
 
     public function __construct(Request $request, WebhookConfig $config)
     {
@@ -47,12 +55,22 @@ class WebhookProcessor
         return $this;
     }
 
-    protected function storeWebhook(): WebhookCall
+    /**
+     * @return WebhookCall 
+     */
+    protected function storeWebhook()
     {
-        return $this->config->webhookModel::storeWebhook($this->config, $this->request);
+        $webhookModel = $this->config->webhookModel;
+        return $webhookModel::storeWebhook($this->config, $this->request);
     }
 
-    protected function processWebhook(WebhookCall $webhookCall): void
+    /**
+     * 
+     * @param WebhookCall $webhookCall 
+     * @return void 
+     * @throws Exception 
+     */
+    protected function processWebhook(WebhookCall $webhookCall)
     {
         try {
             $job = new $this->config->processWebhookJobClass($webhookCall);

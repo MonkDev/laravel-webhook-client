@@ -2,6 +2,8 @@
 
 namespace Spatie\WebhookClient;
 
+use LogicException;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Spatie\WebhookClient\Exceptions\InvalidConfig;
 use Spatie\WebhookClient\SignatureValidator\SignatureValidator;
 use Spatie\WebhookClient\WebhookProfile\WebhookProfile;
@@ -10,29 +12,45 @@ use Spatie\WebhookClient\WebhookResponse\RespondsToWebhook;
 
 class WebhookConfig
 {
-    public string $name;
+    /** @var string */
+    public $name;
 
-    public string $signingSecret;
+    /** @var string */
+    public $signingSecret;
 
-    public string $signatureHeaderName;
+    /** @var string */
+    public $signatureHeaderName;
 
-    public SignatureValidator $signatureValidator;
+    /** @var SignatureValidator */
+    public $signatureValidator;
 
-    public WebhookProfile $webhookProfile;
+    /** @var WebhookProfile */
+    public $webhookProfile;
 
-    public RespondsToWebhook $webhookResponse;
+    /** @var RespondsToWebhook */
+    public $webhookResponse;
 
-    public string $webhookModel;
+    /** @var string */
+    public $webhookModel;
 
-    public string $processWebhookJobClass;
+    /** @var string */
+    public $processWebhookJobClass;
 
-    public function __construct(array $properties)
+    /**
+     * 
+     * @param array $properties 
+     * @return void 
+     * @throws InvalidConfig 
+     * @throws LogicException 
+     * @throws BindingResolutionException 
+     */
+    public function __construct($properties)
     {
         $this->name = $properties['name'];
 
-        $this->signingSecret = $properties['signing_secret'] ?? '';
+        $this->signingSecret = isset($properties['signing_secret']) ? $properties['signing_secret'] : '';
 
-        $this->signatureHeaderName = $properties['signature_header_name'] ?? '';
+        $this->signatureHeaderName = isset($properties['signature_header_name']) ? $properties['signature_header_name'] : '';
 
         if (! is_subclass_of($properties['signature_validator'], SignatureValidator::class)) {
             throw InvalidConfig::invalidSignatureValidator($properties['signature_validator']);
@@ -44,7 +62,7 @@ class WebhookConfig
         }
         $this->webhookProfile = app($properties['webhook_profile']);
 
-        $webhookResponseClass = $properties['webhook_response'] ?? DefaultRespondsTo::class;
+        $webhookResponseClass = isset($properties['webhook_response']) ? $properties['webhook_response'] : DefaultRespondsTo::class;
         if (! is_subclass_of($webhookResponseClass, RespondsToWebhook::class)) {
             throw InvalidConfig::invalidWebhookResponse($webhookResponseClass);
         }

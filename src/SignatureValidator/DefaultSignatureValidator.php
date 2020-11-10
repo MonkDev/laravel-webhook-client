@@ -8,7 +8,7 @@ use Spatie\WebhookClient\WebhookConfig;
 
 class DefaultSignatureValidator implements SignatureValidator
 {
-    public function isValid(Request $request, WebhookConfig $config): bool
+    public function isValid(Request $request, WebhookConfig $config)
     {
         $signature = $request->header($config->signatureHeaderName);
 

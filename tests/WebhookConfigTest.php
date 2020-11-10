@@ -81,7 +81,7 @@ class WebhookConfigTest extends TestCase
         new WebhookConfig($config);
     }
 
-    protected function getValidConfig(): array
+    protected function getValidConfig()
     {
         return [
             'name' => 'default',

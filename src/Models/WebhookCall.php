@@ -16,7 +16,13 @@ class WebhookCall extends Model
         'exception' => 'array',
     ];
 
-    public static function storeWebhook(WebhookConfig $config, Request $request): WebhookCall
+    /**
+     * 
+     * @param WebhookConfig $config 
+     * @param Request $request 
+     * @return WebhookCall 
+     */
+    public static function storeWebhook(WebhookConfig $config, Request $request)
     {
         return self::create([
             'name' => $config->name,
@@ -24,7 +30,12 @@ class WebhookCall extends Model
         ]);
     }
 
-    public function saveException(Exception $exception): self
+    /**
+     * 
+     * @param Exception $exception 
+     * @return self 
+     */
+    public function saveException(Exception $exception)
     {
         $this->exception = [
             'code' => $exception->getCode(),
@@ -37,7 +48,11 @@ class WebhookCall extends Model
         return $this;
     }
 
-    public function clearException(): self
+    /**
+     * 
+     * @return self 
+     */
+    public function clearException()
     {
         $this->exception = null;
 

@@ -2,12 +2,13 @@
 
 namespace Spatie\WebhookClient\Tests;
 
+use PHPUnit\Framework\Assert;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Route;
-use Spatie\WebhookClient\Events\InvalidSignatureEvent;
 use Spatie\WebhookClient\Models\WebhookCall;
+use Spatie\WebhookClient\Events\InvalidSignatureEvent;
 use Spatie\WebhookClient\Tests\TestClasses\CustomRespondsToWebhook;
 use Spatie\WebhookClient\Tests\TestClasses\EverythingIsValidSignatureValidator;
 use Spatie\WebhookClient\Tests\TestClasses\NothingIsValidSignatureValidator;
@@ -19,11 +20,13 @@ use Spatie\WebhookClient\WebhookConfigRepository;
 
 class WebhookControllerTest extends TestCase
 {
-    private array $payload;
+    /** @var array $payload */
+    private $payload;
 
-    private array $headers;
+    /** @var array $headers */
+    private $headers;
 
-    public function setUp(): void
+    public function setUp()
     {
         parent::setUp();
 
@@ -32,7 +35,7 @@ class WebhookControllerTest extends TestCase
 
         Route::webhooks('incoming-webhooks');
 
-        Queue::fake();
+        Queue::swap(new FakeQueue(Queue::getFacadeApplication()));
 
         Event::fake();
 
@@ -106,7 +109,6 @@ class WebhookControllerTest extends TestCase
         $this
             ->postJson('incoming-webhooks', $this->payload, $this->headers)
             ->assertSuccessful();
-
         Queue::assertNothingPushed();
         Event::assertNotDispatched(InvalidSignatureEvent::class);
         $this->assertCount(0, WebhookCall::get());
@@ -156,7 +158,7 @@ class WebhookControllerTest extends TestCase
             ]);
     }
 
-    private function determineSignature(array $payload): string
+    private function determineSignature(array $payload)
     {
         $secret = config('webhook-client.configs.0.signing_secret');
 
@@ -166,7 +168,7 @@ class WebhookControllerTest extends TestCase
     /**
      * @return array
      */
-    protected function getValidPayloadAndHeaders(): array
+    protected function getValidPayloadAndHeaders()
     {
         $payload = ['a' => 1];
 

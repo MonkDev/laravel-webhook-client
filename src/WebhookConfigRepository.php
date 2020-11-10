@@ -5,15 +5,20 @@ namespace Spatie\WebhookClient;
 class WebhookConfigRepository
 {
     /** @var \Spatie\WebhookClient\WebhookConfig[] */
-    protected array $configs;
+    protected $configs;
 
     public function addConfig(WebhookConfig $webhookConfig)
     {
         $this->configs[$webhookConfig->name] = $webhookConfig;
     }
-
-    public function getConfig(string $name): ?WebhookConfig
+    
+    /**
+     * 
+     * @param string $name 
+     * @return \Spatie\WebhookClient\WebhookConfig|null
+     */
+    public function getConfig($name)
     {
-        return $this->configs[$name] ?? null;
+        return isset($this->configs[$name]) ? $this->configs[$name] : null;
     }
 }
